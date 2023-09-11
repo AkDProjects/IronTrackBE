@@ -2,6 +2,7 @@ package com.IronTrack.IronTrackBE.Controllers;
 
 import com.IronTrack.IronTrackBE.Repository.Entities.UserEntitiy;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
+import com.IronTrack.IronTrackBE.Services.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Controller
 @ControllerAdvice
-public class AccessController {
+public class AccessController extends UserDetailsService {
 @Autowired
     UserRepo repo;
     @PostMapping("/login")
@@ -22,8 +23,9 @@ public class AccessController {
         if(result.hasErrors()){
             return "error";
         }
-        boolean credCheck = repo.existsByEmailAndPassword(user.getEmail(), user.getPassword());
-        if (!credCheck){
+        boolean passCredCheck = repo.existsByEmailAndPassword(user.getEmail(), user.getPassword());
+        if (!passCredCheck){
+            return "/% isn't a registered user";
         }else{}
         return "User";
 

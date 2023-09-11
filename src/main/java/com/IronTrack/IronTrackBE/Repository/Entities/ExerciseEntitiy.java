@@ -1,13 +1,19 @@
 package com.IronTrack.IronTrackBE.Repository.Entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
+
+import java.util.Objects;
 
 @Entity
-@Table(name = "Exercises")
+@Table(name = "Exercise")
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class ExerciseEntitiy {
     @Id
     @GeneratedValue
@@ -21,5 +27,18 @@ public class ExerciseEntitiy {
     @Column
     private String instructions;
     //Add Weight, Sets, Reps, time and instructions
+    //No longer adding those here, will add them in routine
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ExerciseEntitiy that = (ExerciseEntitiy) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
