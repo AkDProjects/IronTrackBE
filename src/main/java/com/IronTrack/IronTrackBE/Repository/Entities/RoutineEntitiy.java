@@ -1,18 +1,37 @@
 package com.IronTrack.IronTrackBE.Repository.Entities;
 
 import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
 
+import java.util.Objects;
+
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@Table(name = "Routines")
+@Table(name = "routines")
 public class RoutineEntitiy {
     @Id
-    //Explained, Id will be for the specific object that's created in that table.
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    private Integer id;
+    @Column
+    private Integer user_Id;
+    @Column
     private String name;
-    private String email;
-    @Column(nullable = false, unique = false,length = 20)
-    private String routineName;
-    @Column(nullable = false, unique = false, length = 15)
-    private String routineType;
-    //Need to update with join table dervived queries
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        RoutineEntitiy that = (RoutineEntitiy) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

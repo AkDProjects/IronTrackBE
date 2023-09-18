@@ -7,41 +7,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
 @ControllerAdvice
 public class AccessController extends UserDetailsService {
-@Autowired
+
+    @Autowired
     UserRepo repo;
+
+    @ResponseBody
     @PostMapping("/login")
-    public String submit(@ModelAttribute("loginForm") UserEntitiy user, BindingResult result){
-        if(result.hasErrors()){
-            return "error";
-        }
-        boolean passCredCheck = repo.existsByEmailAndPassword(user.getEmail(), user.getPassword());
-        if (!passCredCheck){
-            return "/% isn't a registered user";
-        }else{}
-        return "User";
+    @CrossOrigin(origins = "http://localhost:4200")
+    //returns back the credentials of the user from the db in the responseBody of the http request
+    public List<UserEntitiy> loginSubmit(@ModelAttribute("loginForm") UserEntitiy user) {
 
-}
+        return repo.findByEmailAndPassword(user.getEmail(), user.getPassword());
+
+    }
+
+
+    @ResponseBody
     @PostMapping("/signup")
-    public String Submit(@ModelAttribute("singupForm") UserEntitiy user, BindingResult result){
-        if(result.hasErrors()){
-            return "error";
-        }
-        boolean credCheck = repo.existsByEmailAndPassword(user.getEmail(), user.getPassword());
-        if (credCheck){
-            //if true, do not allow sign up, throw error
-        }else{
+    @CrossOrigin(origins = "http://localhost:4200")
+    //returns the user credentials in the response body after creating the user in the db
+    public List<UserEntitiy> signUpSubmit(@ModelAttribute("singupForm") UserEntitiy user) {
+        if (repo.existsByEmailAndPassword(user.getEmail(), user.getPassword())) {
+            return repo.findByEmailAndPassword(user.getEmail(), user.getPassword());
+
+        } else {//pass data to db
 
         }
-        return "User";
-
     }
 }

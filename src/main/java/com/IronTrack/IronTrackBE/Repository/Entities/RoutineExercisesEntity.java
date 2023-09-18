@@ -6,34 +6,38 @@ import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
-@Entity
-@Table(name = "exercises")
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class ExerciseEntitiy {
-    @Id
+@Entity
+@Table(name = "routine_exercises")
+
+@AllArgsConstructor
+@NoArgsConstructor
+public class RoutineExercisesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    //primary key
     @Column
     private Integer id;
     @Column
-    private String type;
+    private Integer routine_id;
     @Column
-    private String muscle;
+    private Integer exercise_id;
     @Column
-    private String instructions;
+    private Integer weight;
     @Column
-    private String name;
+    private Integer sets;
+    @Column
+    private Integer reps;
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ExerciseEntitiy that = (ExerciseEntitiy) o;
+        RoutineExercisesEntity that = (RoutineExercisesEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 
