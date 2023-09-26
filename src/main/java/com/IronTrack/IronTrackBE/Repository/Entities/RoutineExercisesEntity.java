@@ -3,6 +3,7 @@ package com.IronTrack.IronTrackBE.Repository.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Objects;
 
@@ -14,17 +15,16 @@ import java.util.Objects;
 @Table(name = "routine_exercises")
 
 @AllArgsConstructor
-@NoArgsConstructor
 public class RoutineExercisesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     //primary key
     @Column
     private Integer id;
+    @Column(name = "routine_id")
+    private Integer routineId;
     @Column
-    private Integer routine_id;
-    @Column
-    private Integer exercise_id;
+    private String exercise_id;
     @Column
     private Integer weight;
     @Column

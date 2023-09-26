@@ -1,24 +1,25 @@
 package com.IronTrack.IronTrackBE.Repository.Entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "exercises")
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 public class ExerciseEntitiy {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private Integer id;
+    private String name;
     @Column
     private String type;
     @Column
@@ -26,7 +27,9 @@ public class ExerciseEntitiy {
     @Column
     private String instructions;
     @Column
-    private String name;
+    private String equipment;
+    @Column
+    private String difficulty;
 
 
     @Override
@@ -34,7 +37,7 @@ public class ExerciseEntitiy {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ExerciseEntitiy that = (ExerciseEntitiy) o;
-        return id != null && Objects.equals(id, that.id);
+        return name != null && Objects.equals(name, that.name);
     }
 
     @Override

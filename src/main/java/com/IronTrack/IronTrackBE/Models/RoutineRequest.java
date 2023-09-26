@@ -1,11 +1,11 @@
 package com.IronTrack.IronTrackBE.Models;
 
-import com.IronTrack.IronTrackBE.Models.Exercise;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class RoutineRequest {
     private Integer userId;
