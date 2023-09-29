@@ -12,6 +12,8 @@ import com.IronTrack.IronTrackBE.Repository.RoutineRepo;
 import com.IronTrack.IronTrackBE.Services.IronService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,7 @@ public class RoutineController {
     @PostMapping("/createRoutine")
     //@CrossOrigin(origins = "http://localhost:4200")
     @ResponseBody
-    public Boolean createRoutine(@RequestBody RoutineCreation creation, @ModelAttribute("addExerciseForm") RoutineEntitiy routinesFromUser) throws IOException {
+    public Boolean createRoutine(@RequestBody RoutineCreation creation) throws IOException {
         Optional<RoutineEntitiy> isCreationInDB = routineRepo.findFirstByName(creation.getName());
         if (isCreationInDB.isPresent()) {
             return false;
@@ -55,9 +57,9 @@ public class RoutineController {
         }
     }
 
-    @PostMapping("/home")
+    @GetMapping("/home")
     @ResponseBody
-    //@CrossOrigin(origins = "http://localhost:4200")
+   //@CrossOrigin(origins = "http://localhost:4200")
     public List<Exercise> getRoutineExercises(@RequestBody RoutineRequest request) {
         Optional<RoutineEntitiy> isRoutine = routineRepo.findFirstByName(request.getName());
         if (isRoutine.isPresent()) {
@@ -83,5 +85,14 @@ public class RoutineController {
     public void test() throws JsonProcessingException {
         //pass list of exercises from the user
          ironService.updateExercises("barbell curl");
+    }
+
+    @ResponseBody
+    @GetMapping("/")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public void responseTest() throws JSONException {
+        String jsonString = "{\"key1\": \"value1\", \"key2\": \"value2\"}";
+        JSONObject jsonObject = new JSONObject((jsonString));
+
     }
 }
