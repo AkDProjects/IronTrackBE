@@ -1,0 +1,30 @@
+# Iron-Track Back End
+
+Iron-Track Back End is the service layer between Iron-Track and Iron-Track's database.
+## Installation
+
+To Develop: Install JDK, run
+```
+ mvn install
+```
+in terminal. This will install the dependencies from the Maven Pom file.
+
+To Run: Install JRE, go to command line, type
+```
+JavacIronTrackBE.java
+```
+this will compile the java program, then
+
+ ```
+java IronTrackBe
+```
+will run the program.
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## Notes
+Api Key are in the environment vars.
