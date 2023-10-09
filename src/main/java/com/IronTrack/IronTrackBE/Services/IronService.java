@@ -24,11 +24,9 @@ public class IronService {
     private String API_KEY;
     @Autowired
     ExerciseRepo exerciseRepo;
-    //List<Exercise> exercisesFromUser
     public void updateExercises(String exerciseName) throws JsonProcessingException {
         exerciseName = StringUtils.replace(exerciseName," ","_");
         HttpRequest httpRequest = HttpRequest.newBuilder()
-                //pass names taken from model into url
                 .uri(URI.create("https://api.api-ninjas.com/v1/exercises?name="+exerciseName))
                 .header("X-Api-Key", API_KEY)
                 .method("GET", HttpRequest.BodyPublishers.noBody())
@@ -50,5 +48,5 @@ public class IronService {
 
     }
 
-    //new service where I take the list of strings and add underscores where spaces are
+
 }

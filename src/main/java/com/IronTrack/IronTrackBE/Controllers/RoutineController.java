@@ -34,9 +34,9 @@ public class RoutineController {
 
 
     @PostMapping("/createRoutine")
-    //@CrossOrigin(origins = "http://localhost:4200")
     @ResponseBody
     public Boolean createRoutine(@RequestBody RoutineCreation creation) throws IOException {
+        //Potentially remove first conditional, check to see if anything breaks
         Optional<RoutineEntitiy> isCreationInDB = routineRepo.findFirstByName(creation.getName());
         if (isCreationInDB.isPresent()) {
             return false;
@@ -59,7 +59,6 @@ public class RoutineController {
 
     @GetMapping("/home")
     @ResponseBody
-   //@CrossOrigin(origins = "http://localhost:4200")
     public List<Exercise> getRoutineExercises(@RequestBody RoutineRequest request) {
         Optional<RoutineEntitiy> isRoutine = routineRepo.findFirstByName(request.getName());
         if (isRoutine.isPresent()) {
@@ -67,6 +66,8 @@ public class RoutineController {
             List<String> exercise_id = routineExerciseRepo.findExercisesByRoutineID(routine.getId());
             List<ExerciseEntitiy> exercises = exerciseRepo.findAllById(exercise_id);
             List<RoutineExercisesEntity> routineExercises = routineExerciseRepo.findAllByRoutineId(routine.getId());
+            //Update to send
+            List<RoutineEntitiy> routineList = new ArrayList<>();
             List<Exercise> exerciseList = new ArrayList<>();
             for (RoutineExercisesEntity rt : routineExercises) {
                 ExerciseEntitiy b = exercises.stream().filter(a -> Objects.equals(a.getName(), rt.getExercise_id())).findFirst().get();

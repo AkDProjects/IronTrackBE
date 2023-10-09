@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class RoutineRequest {
     private Integer userId;
+    //Maybe make a list of strings
     private String name;
 
 }

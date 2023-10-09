@@ -13,7 +13,6 @@ public interface UserRepo extends JpaRepository<UserEntitiy, Long> {
     List<UserEntitiy> findByEmailAndPassword(String email, String password);
     Boolean existsByEmailAndPassword(String email, String password);
     Boolean existsByEmail(String email);
-    @Query
 
     List<UserEntitiy> findByEmail(String email);
 }

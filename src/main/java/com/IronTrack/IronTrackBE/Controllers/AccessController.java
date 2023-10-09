@@ -18,7 +18,6 @@ public class AccessController {
     UserRepo userRepo;
     @ResponseBody
     @PostMapping("/login")
-    //@CrossOrigin(origins = "http://localhost:4200")
     //returns back the credentials of the user from the db in the responseBody of the http request
     public List<UserEntitiy> loginSubmit(@RequestBody User user) {
         List<UserEntitiy> listPeople = userRepo.findByEmailAndPassword(user.getEmail(), user.getPassword());
@@ -30,7 +29,6 @@ public class AccessController {
 
     @ResponseBody
     @PostMapping("/signup")
-    ///@CrossOrigin(origins = "http://localhost:4200")
     //returns the user credentials in the response body after creating the user in the db
     public List<UserEntitiy> signUpSubmit(@RequestBody UserEntitiy user) {
         UserEntitiy userCreation = new UserEntitiy();
@@ -43,7 +41,7 @@ public class AccessController {
             userCreation.setName(user.getName());
             userRepo.save(userCreation);
 
-            //send info from model to db, then .saveAll method (refer to other controller)
+
 
         }
         return null;
