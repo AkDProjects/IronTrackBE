@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.IronTrack.IronTrackBE.Services.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AccessController {
 
