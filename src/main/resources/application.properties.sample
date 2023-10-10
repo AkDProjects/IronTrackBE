@@ -11,3 +11,6 @@ spring.session.store-type=jdbc
 spring.session.jdbc.initialize-schema=ALWAYS
 logging.level.org.springframework.security=DEBUG
 
+API_KEY=
+SECRET_KEY=
+
