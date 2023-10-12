@@ -1,16 +1,14 @@
 package com.IronTrack.IronTrackBE.Services;
 
-import com.IronTrack.IronTrackBE.Controllers.AuthenticationResponse;
-import com.IronTrack.IronTrackBE.Controllers.LoginRequest;
-import com.IronTrack.IronTrackBE.Controllers.SignupRequest;
+import com.IronTrack.IronTrackBE.Models.AuthenticationResponse;
+import com.IronTrack.IronTrackBE.Models.LoginRequest;
+import com.IronTrack.IronTrackBE.Models.SignupRequest;
 import com.IronTrack.IronTrackBE.Repository.Entities.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
