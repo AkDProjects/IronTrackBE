@@ -1,7 +1,6 @@
 package com.IronTrack.IronTrackBE.Services;
 
-import com.IronTrack.IronTrackBE.Models.Exercise;
-import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntitiy;
+import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
 import com.IronTrack.IronTrackBE.Repository.ExerciseRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,9 +38,9 @@ public class IronService {
         }
         assert response != null;
         ObjectMapper objectMapper = new ObjectMapper();
-        ExerciseEntitiy[] ninjaApiExercises =  objectMapper.readValue(response.body(), ExerciseEntitiy[].class);
-        List<ExerciseEntitiy> ninjaApiExercisesAsList = Arrays.asList(ninjaApiExercises);
-        for(ExerciseEntitiy entity: ninjaApiExercisesAsList){
+        ExerciseEntity[] ninjaApiExercises =  objectMapper.readValue(response.body(), ExerciseEntity[].class);
+        List<ExerciseEntity> ninjaApiExercisesAsList = Arrays.asList(ninjaApiExercises);
+        for(ExerciseEntity entity: ninjaApiExercisesAsList){
             System.out.println(entity.getInstructions().length());
         }
         exerciseRepo.saveAll(ninjaApiExercisesAsList);

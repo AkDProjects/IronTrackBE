@@ -18,10 +18,13 @@ public class RoutineEntitiy {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Integer id;
+    @ManyToOne
+    @JoinColumn
     @Column
     private Integer user_Id;
     @Column
     private String name;
+
 
     @Override
     public boolean equals(Object o) {
