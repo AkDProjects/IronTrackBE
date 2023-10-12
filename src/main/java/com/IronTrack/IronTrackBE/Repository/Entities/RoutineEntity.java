@@ -3,7 +3,6 @@ package com.IronTrack.IronTrackBE.Repository.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.Objects;
 
@@ -13,15 +12,14 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "routines")
-public class RoutineEntitiy {
+public class RoutineEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Integer id;
+    private Long id;
     @ManyToOne
-    @JoinColumn
-    @Column
-    private Integer user_Id;
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
     @Column
     private String name;
 
@@ -30,7 +28,7 @@ public class RoutineEntitiy {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        RoutineEntitiy that = (RoutineEntitiy) o;
+        RoutineEntity that = (RoutineEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 
