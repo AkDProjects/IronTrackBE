@@ -1,4 +1,4 @@
-package com.IronTrack.IronTrackBE.Controllers;
+package com.IronTrack.IronTrackBE.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
