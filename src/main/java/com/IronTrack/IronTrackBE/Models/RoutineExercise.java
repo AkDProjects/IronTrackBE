@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateRoutineRequest {
-    private String name;
-    private List<RoutineExercise> exercises;
+public class RoutineExercise {
+    private Exercise exercise;
+    private String weight;
+    private Integer sets;
+    private Integer quantity;
+    private String quantityUnit;
 }
