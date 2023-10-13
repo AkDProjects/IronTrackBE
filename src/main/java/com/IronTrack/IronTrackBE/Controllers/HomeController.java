@@ -3,7 +3,6 @@ package com.IronTrack.IronTrackBE.Controllers;
 import com.IronTrack.IronTrackBE.Models.CreateRoutineRequest;
 import com.IronTrack.IronTrackBE.Models.CreateRoutineResponse;
 import com.IronTrack.IronTrackBE.Services.HomeService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,9 @@ public class HomeController {
             response.setMessage(message);
             response.setStatusCode(HttpStatus.CREATED.value());
 
-        } catch (JsonProcessingException | RuntimeException e) {
-            response.setMessage("Routine could not be created");
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        } catch (SecurityException e) {
+            response.setMessage("You are not authorized");
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
         }
 
         return ResponseEntity.status(response.getStatusCode()).body(response);
