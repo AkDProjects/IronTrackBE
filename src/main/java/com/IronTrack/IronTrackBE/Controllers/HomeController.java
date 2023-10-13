@@ -2,6 +2,7 @@ package com.IronTrack.IronTrackBE.Controllers;
 
 import com.IronTrack.IronTrackBE.Models.CreateRoutineRequest;
 import com.IronTrack.IronTrackBE.Models.CreateRoutineResponse;
+import com.IronTrack.IronTrackBE.Models.GetRoutinesResponse;
 import com.IronTrack.IronTrackBE.Models.Routine;
 import com.IronTrack.IronTrackBE.Services.HomeService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,9 @@ public class HomeController {
     private final HomeService service;
 
     @GetMapping
-    public ResponseEntity<List<Routine>> getRoutines() {
-        List<Routine> response = service.getRoutines();
-
+    public ResponseEntity<GetRoutinesResponse> getRoutines() {
+        List<Routine> routines = service.getRoutines();
+        GetRoutinesResponse response = new GetRoutinesResponse(routines);
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
     }
 
