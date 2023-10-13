@@ -1,5 +1,7 @@
 package com.IronTrack.IronTrackBE.Controllers;
 
+import com.IronTrack.IronTrackBE.Models.TokenResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TokenController {
     @GetMapping
-    public ResponseEntity<String> checkToken() {
-        // Either respond with 200 or 403
-        return ResponseEntity.ok("Success!");
+    public ResponseEntity<TokenResponse> checkToken() {
+
+        TokenResponse response = new TokenResponse();
+        response.setAuthenticated(true);
+        return ResponseEntity.status(HttpStatus.ACCEPTED.value()).body(response);
     };
 }
