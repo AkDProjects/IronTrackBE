@@ -1,8 +1,6 @@
 package com.IronTrack.IronTrackBE.Services;
 
-import com.IronTrack.IronTrackBE.Models.CreateRoutineRequest;
-import com.IronTrack.IronTrackBE.Models.Exercise;
-import com.IronTrack.IronTrackBE.Models.RoutineExercise;
+import com.IronTrack.IronTrackBE.Models.*;
 import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
 import com.IronTrack.IronTrackBE.Repository.Entities.RoutineEntity;
 import com.IronTrack.IronTrackBE.Repository.Entities.RoutineExercisesEntity;
@@ -37,10 +35,14 @@ public class HomeService {
     private final RoutineExercisesRepo routineExercisesRepo;
     private final ApiNinjasService apiNinjas;
 
-    public String createRoutine(CreateRoutineRequest request) throws SecurityException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = getUserEntity(auth);
+    public List<Routine> getRoutines() {
+        UserEntity user = getUserEntity();
 
+        return getUserRoutines(user);
+    }
+
+    public String createRoutine(CreateRoutineRequest request) throws SecurityException {
+        UserEntity user = getUserEntity();
         List<ExerciseEntity> exercises = getExerciseEntities(request.getExercises());
         RoutineEntity routine = saveRoutine(request.getName(), user);
         saveRoutineExerciseEntities(request.getExercises(), routine, exercises);
@@ -48,11 +50,14 @@ public class HomeService {
         return "Successfully created new routine";
     }
 
-    private UserEntity getUserEntity(Authentication auth) {
+    private UserEntity getUserEntity() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
+
             return userRepo.findByEmail(auth.getName())
                     .orElseThrow(() -> new UsernameNotFoundException("Invalid user email"));
         }
+
         throw new SecurityException("User is not authenticated");
     }
 
@@ -81,7 +86,6 @@ public class HomeService {
         }
 
         return exercises;
-
     }
 
     private RoutineEntity saveRoutine(String name, UserEntity user) {
@@ -103,8 +107,54 @@ public class HomeService {
             routineExercisesEntity.setSets(routineExercise.getSets());
             routineExercisesEntity.setQuantity(routineExercise.getQuantity());
             routineExercisesEntity.setQuantityUnit(routineExercise.getQuantityUnit());
+
             routineExercisesRepo.save(routineExercisesEntity);
         }
+    }
+
+    private List<Routine> getUserRoutines(UserEntity user) {
+        List<Routine> routines = new ArrayList<>();
+        List<RoutineEntity> routineEntities = routineRepo.findAllByUserEntity(user).orElse(new ArrayList<>());
+        for (RoutineEntity routineEntity: routineEntities) {
+            Routine routine = new Routine();
+            List<RoutineExercise> exercises = new ArrayList<>();
+            List<RoutineExercisesEntity> routineExerciseEntities = routineExercisesRepo.findAllByRoutineEntity(routineEntity);
+            for (RoutineExercisesEntity routineExerciseEntity : routineExerciseEntities) {
+                RoutineExercise exercise = mapRoutineExerciseEntityToRoutineExercise(routineExerciseEntity);
+                exercises.add(exercise);
+            }
+
+            routine.setName(routineEntity.getName());
+            routine.setExercises(exercises);
+            routines.add(routine);
+        }
+
+        return routines;
+    }
+
+    private Exercise mapExerciseEntityToExercise(ExerciseEntity exerciseEntity) {
+
+        Exercise exercise = new Exercise();
+        exercise.setDifficulty(exerciseEntity.getDifficulty());
+        exercise.setEquipment(exerciseEntity.getEquipment());
+        exercise.setName(exerciseEntity.getName());
+        exercise.setType(exerciseEntity.getType());
+        exercise.setMuscle(exerciseEntity.getMuscle());
+        exercise.setInstructions(exerciseEntity.getInstructions());
+
+        return exercise;
+    }
+
+    private RoutineExercise mapRoutineExerciseEntityToRoutineExercise(RoutineExercisesEntity routineExerciseEntity) {
+        Exercise exercise = mapExerciseEntityToExercise(routineExerciseEntity.getExerciseEntity());
+        RoutineExercise routineExercise = new RoutineExercise();
+        routineExercise.setExercise(exercise);
+        routineExercise.setQuantity(routineExerciseEntity.getQuantity());
+        routineExercise.setWeight(routineExerciseEntity.getWeight());
+        routineExercise.setSets(routineExerciseEntity.getSets());
+        routineExercise.setQuantityUnit(routineExerciseEntity.getQuantityUnit());
+
+        return routineExercise;
     }
 }
 
