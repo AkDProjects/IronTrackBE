@@ -2,7 +2,10 @@ package com.IronTrack.IronTrackBE.Controllers;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,16 +19,32 @@ public class AccessController {
 
     private final AuthService service;
     @PostMapping("/signup")
-    public ResponseEntity<AuthenticationResponse> signup(
+    public ResponseEntity<?> signup(
             @RequestBody SignupRequest request
     ) {
-        return ResponseEntity.ok(service.signup(request));
-    };
+        try {
+            AuthenticationResponse response = service.signup(request);
+            return ResponseEntity.ok(response);
+        } catch (DataIntegrityViolationException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setMessage(e.getMessage());
+            response.setStatusCode(HttpStatus.CONFLICT.value());
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        }
+    }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> signup(
+    public ResponseEntity<?> login(
             @RequestBody LoginRequest request
     ) {
-        return ResponseEntity.ok(service.login(request));
+        try {
+            AuthenticationResponse response = service.login(request);
+            return ResponseEntity.ok(response);
+        } catch (BadCredentialsException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setMessage(e.getMessage());
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        }
     }
 }

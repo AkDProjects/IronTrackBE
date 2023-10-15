@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
@@ -24,7 +21,6 @@ public class AuthService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     public AuthenticationResponse signup(SignupRequest request) {
 
         try {
@@ -39,7 +35,7 @@ public class AuthService {
 
             return AuthenticationResponse.builder().token(jwtToken).build();
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Email address is already registered");
+            throw new DataIntegrityViolationException("Email address is already in use");
         }
     }
 
@@ -53,7 +49,7 @@ public class AuthService {
                     .token(jwtToken)
                     .build();
         } else {
-            throw new BadCredentialsException("Invalid Credentials. Please try again");
+            throw new BadCredentialsException("Invalid credentials. Please try again");
         }
     }
 }
