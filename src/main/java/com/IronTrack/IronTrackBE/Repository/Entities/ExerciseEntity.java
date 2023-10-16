@@ -15,28 +15,30 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-public class ExerciseEntitiy {
+public class ExerciseEntity {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(unique = true)
     private String name;
     @Column
     private String type;
     @Column
     private String muscle;
     @Column
-    private String instructions;
-    @Column
     private String equipment;
     @Column
     private String difficulty;
+    @Column(columnDefinition = "TEXT")
+    private String instructions;
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        ExerciseEntitiy that = (ExerciseEntitiy) o;
+        ExerciseEntity that = (ExerciseEntity) o;
         return name != null && Objects.equals(name, that.name);
     }
 
