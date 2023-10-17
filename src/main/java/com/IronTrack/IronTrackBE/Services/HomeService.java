@@ -125,6 +125,7 @@ public class HomeService {
             }
 
             routine.setName(routineEntity.getName());
+            routine.setId(Optional.ofNullable(routineEntity.getId()));
             routine.setExercises(exercises);
             routines.add(routine);
         }
@@ -135,6 +136,7 @@ public class HomeService {
     private Exercise mapExerciseEntityToExercise(ExerciseEntity exerciseEntity) {
 
         Exercise exercise = new Exercise();
+        exercise.setId(Optional.ofNullable(exerciseEntity.getId()));
         exercise.setDifficulty(exerciseEntity.getDifficulty());
         exercise.setEquipment(exerciseEntity.getEquipment());
         exercise.setName(exerciseEntity.getName());
@@ -148,6 +150,7 @@ public class HomeService {
     private RoutineExercise mapRoutineExerciseEntityToRoutineExercise(RoutineExercisesEntity routineExerciseEntity) {
         Exercise exercise = mapExerciseEntityToExercise(routineExerciseEntity.getExerciseEntity());
         RoutineExercise routineExercise = new RoutineExercise();
+        routineExercise.setId(Optional.ofNullable(routineExerciseEntity.getId()));
         routineExercise.setExercise(exercise);
         routineExercise.setQuantity(routineExerciseEntity.getQuantity());
         routineExercise.setWeight(routineExerciseEntity.getWeight());

@@ -5,12 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Routine {
     //Maybe make a list of strings
+    private Optional<Long> id;
     private String name;
     private List<RoutineExercise> exercises;
 
