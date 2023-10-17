@@ -1,7 +1,6 @@
 package com.IronTrack.IronTrackBE.Services;
 
-import com.IronTrack.IronTrackBE.Models.Exercise;
-import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntitiy;
+import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
 import com.IronTrack.IronTrackBE.Repository.ExerciseRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,12 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class IronService {
+public class ApiNinjasService {
     @Value("${API_KEY}")
     private String API_KEY;
     @Autowired
     ExerciseRepo exerciseRepo;
-    public void updateExercises(String exerciseName) throws JsonProcessingException {
+    public HttpResponse<String> getExercise(String exerciseName) throws JsonProcessingException {
         exerciseName = StringUtils.replace(exerciseName," ","_");
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.api-ninjas.com/v1/exercises?name="+exerciseName))
@@ -35,16 +34,10 @@ public class IronService {
         try {
             response = HttpClient.newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        assert response != null;
-        ObjectMapper objectMapper = new ObjectMapper();
-        ExerciseEntitiy[] ninjaApiExercises =  objectMapper.readValue(response.body(), ExerciseEntitiy[].class);
-        List<ExerciseEntitiy> ninjaApiExercisesAsList = Arrays.asList(ninjaApiExercises);
-        for(ExerciseEntitiy entity: ninjaApiExercisesAsList){
-            System.out.println(entity.getInstructions().length());
-        }
-        exerciseRepo.saveAll(ninjaApiExercisesAsList);
+
+        return response;
 
     }
 

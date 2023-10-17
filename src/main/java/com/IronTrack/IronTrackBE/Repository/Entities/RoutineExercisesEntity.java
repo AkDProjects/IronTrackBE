@@ -16,21 +16,23 @@ import java.util.Objects;
 
 @AllArgsConstructor
 public class RoutineExercisesEntity {
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    //primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "routine_id")
+    private RoutineEntity routineEntity;
+    @ManyToOne
+    @JoinColumn(name = "exercise_id")
+    private ExerciseEntity exerciseEntity;
     @Column
-    private Integer id;
-    @Column(name = "routine_id")
-    private Integer routineId;
-    @Column
-    private String exercise_id;
-    @Column
-    private Integer weight;
+    private String weight;
     @Column
     private Integer sets;
     @Column
-    private Integer reps;
+    private Integer quantity;
+    @Column
+    private String quantityUnit;
 
 
     @Override

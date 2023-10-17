@@ -1,15 +1,17 @@
 package com.IronTrack.IronTrackBE.Models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class RoutineRequest {
-    private Integer userId;
-    //Maybe make a list of strings
-    private String name;
+public class SignupRequest {
 
+    private String name;
+    private String email;
+    private String password;
 }
