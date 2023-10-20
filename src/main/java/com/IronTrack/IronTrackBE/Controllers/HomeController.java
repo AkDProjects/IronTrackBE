@@ -31,13 +31,20 @@ public class HomeController {
             response.setRoutine(routine);
 
             return ResponseEntity.ok(response);
+
         } catch (NullPointerException e) {
             ErrorResponse response = new ErrorResponse();
-
             response.setStatusCode(HttpStatus.NOT_FOUND.value());
             response.setMessage("Routine with ID: " + routineId + " was not found");
+
             return ResponseEntity.status(response.getStatusCode()).body(response);
 
+        } catch (SecurityException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            response.setMessage("Routine with ID: " + routineId + " not accessible");
+
+            return ResponseEntity.status(response.getStatusCode()).body(response);
         }
     }
 
