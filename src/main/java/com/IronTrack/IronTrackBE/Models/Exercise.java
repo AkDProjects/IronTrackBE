@@ -14,7 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @Data
 public class Exercise {
-    private Optional<Long> id;
+    private Long id;
     public String name;
     public String type;
     public String muscle;

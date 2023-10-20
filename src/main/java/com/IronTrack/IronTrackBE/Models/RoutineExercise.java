@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoutineExercise {
-    private Optional<Long> id;
+    private Long id;
     private Exercise exercise;
     private String weight;
     private Integer sets;
