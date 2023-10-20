@@ -12,7 +12,7 @@ import java.util.Optional;
 @Data
 public class Routine {
     //Maybe make a list of strings
-    private Optional<Long> id;
+    private Long id;
     private String name;
     private List<RoutineExercise> exercises;
 
