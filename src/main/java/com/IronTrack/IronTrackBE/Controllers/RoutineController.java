@@ -1,7 +1,8 @@
 package com.IronTrack.IronTrackBE.Controllers;
 
-import com.IronTrack.IronTrackBE.Repository.Entities.RoutineExercisesEntity;
-import com.IronTrack.IronTrackBE.Services.RoutineService
+import com.IronTrack.IronTrackBE.Models.GetRoutineExerciseResponse;
+import com.IronTrack.IronTrackBE.Models.RoutineExercise;
+import com.IronTrack.IronTrackBE.Services.RoutineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/routines/{routine_id}")
@@ -23,12 +26,17 @@ public class RoutineController {
             @PathVariable("routine_exercise_id") Long routineExerciseId
     ) {
         ErrorResponse errorResponse= new ErrorResponse();
-        RoutineExercisesEntity response;
+
         try {
-            response = service.getRoutineExercise(routineId, routineExerciseId);
+            GetRoutineExerciseResponse response = new GetRoutineExerciseResponse();
+            RoutineExercise routineExercise = service.getRoutineExercise(routineId, routineExerciseId);
+            response.setRoutineExericse(routineExercise);
             return ResponseEntity.ok(response);
-        } catch (NullPointerException e) {
+        } catch (NoSuchElementException e) {
             errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            errorResponse.setMessage(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
             errorResponse.setMessage(e.getMessage());
         } catch (SecurityException e) {
             errorResponse.setStatusCode(HttpStatus.UNAUTHORIZED.value());
@@ -36,5 +44,7 @@ public class RoutineController {
         }
 
         return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
+
+
     }
 }
