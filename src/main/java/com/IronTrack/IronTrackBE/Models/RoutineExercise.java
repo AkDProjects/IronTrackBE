@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoutineExercise {
+    public Long id;
     private Exercise exercise;
     private String weight;
     private Integer sets;
