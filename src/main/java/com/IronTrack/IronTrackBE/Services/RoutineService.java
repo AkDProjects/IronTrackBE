@@ -28,6 +28,13 @@ public class RoutineService {
     private final RoutineExercisesRepo routineExercisesRepo;
     private final ExerciseRepo exerciseRepo;
 
+    public RoutineExercise getRoutineExercise(Long routineId, Long routineExerciseId) throws NullPointerException, SecurityException {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        RoutineExercisesEntity routineExercises = getRoutineExercisesEntity(routine, routineExerciseId);
+
+        return mapRoutineExercisesEntityToRoutineExercise(routineExercises);
+    }
+
     public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
         RoutineEntity routine = getRoutineEntity(routineId);
         RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
@@ -106,6 +113,32 @@ public class RoutineService {
         if (routineRef != routine) {
             throw new IllegalArgumentException("Exercise belongs to different routine");
         }
+
+        return routineExercise;
+    }
+
+    private Exercise mapExerciseEntityToExercise(ExerciseEntity exerciseEntity) {
+        Exercise exercise = new Exercise();
+        exercise.setInstructions(exerciseEntity.getInstructions());
+        exercise.setEquipment(exerciseEntity.getEquipment());
+        exercise.setName(exerciseEntity.getName());
+        exercise.setType(exerciseEntity.getType());
+        exercise.setMuscle(exerciseEntity.getMuscle());
+        exercise.setDifficulty(exerciseEntity.getDifficulty());
+        exercise.setId(exerciseEntity.getId());
+
+        return exercise;
+    }
+
+    private RoutineExercise mapRoutineExercisesEntityToRoutineExercise(RoutineExercisesEntity routineExercises) {
+        RoutineExercise routineExercise = new RoutineExercise();
+        routineExercise.setWeight(routineExercises.getWeight());
+        routineExercise.setSets(routineExercises.getSets());
+        routineExercise.setQuantity(routineExercises.getQuantity());
+        routineExercise.setQuantityUnit(routineExercises.getQuantityUnit());
+        ExerciseEntity exercise = routineExercises.getExerciseEntity();
+        routineExercise.setExercise(mapExerciseEntityToExercise(exercise));
+        routineExercise.setId(routineExercises.getId());
 
         return routineExercise;
     }

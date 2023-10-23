@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoutineExercise {
-    private Long id;
-    private Exercise exercise;
-    private String weight;
-    private Integer sets;
-    private Integer quantity;
-    private String quantityUnit;
+public class GetRoutineExerciseResponse {
+
+    private RoutineExercise routineExericse;
 }
