@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoutineExercise {
+    private Long id;
     private Exercise exercise;
     private String weight;
     private Integer sets;
