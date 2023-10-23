@@ -41,6 +41,28 @@ public class HomeService {
         return getUserRoutines(user);
     }
 
+    public Routine getRoutine(Long routineId) throws NullPointerException, SecurityException {
+        UserEntity user = getUserEntity();
+        RoutineEntity routineEntity = routineRepo.findById(routineId);
+        Routine routine = new Routine();
+        routine.setId(routineId);
+        try {
+            routine.setName(routineEntity.getName());
+        } catch (NullPointerException e) {
+            // catch routine being null
+            throw new NullPointerException("Routine could not be found");
+        }
+
+        if (routineEntity.getUserEntity() != user) {
+            throw new SecurityException("Routine does not belong to this user");
+        }
+
+        List<RoutineExercise> routineExercises = getRoutineExercises(routineEntity);
+        routine.setExercises(routineExercises);
+
+        return routine;
+    }
+
     public String createRoutine(CreateRoutineRequest request) throws SecurityException {
         UserEntity user = getUserEntity();
         List<ExerciseEntity> exercises = getExerciseEntities(request.getExercises());
@@ -59,6 +81,16 @@ public class HomeService {
         }
 
         throw new SecurityException("User is not authenticated");
+    }
+
+    private List<RoutineExercise> getRoutineExercises(RoutineEntity routineEntity) {
+        List<RoutineExercisesEntity> routineExercisesEntities = routineExercisesRepo.findAllByRoutineEntity(routineEntity);
+        List<RoutineExercise> routineExercises = new ArrayList<>();
+        for (RoutineExercisesEntity routineExercisesEntity: routineExercisesEntities) {
+            RoutineExercise routineExercise = mapRoutineExerciseEntityToRoutineExercise(routineExercisesEntity);
+            routineExercises.add(routineExercise);
+        }
+        return routineExercises;
     }
 
     private List<ExerciseEntity> getExerciseEntities(List<RoutineExercise> routineExercises) {
@@ -117,15 +149,8 @@ public class HomeService {
         List<RoutineEntity> routineEntities = routineRepo.findAllByUserEntity(user).orElse(new ArrayList<>());
         for (RoutineEntity routineEntity: routineEntities) {
             Routine routine = new Routine();
-            List<RoutineExercise> exercises = new ArrayList<>();
-            List<RoutineExercisesEntity> routineExerciseEntities = routineExercisesRepo.findAllByRoutineEntity(routineEntity);
-            for (RoutineExercisesEntity routineExerciseEntity : routineExerciseEntities) {
-                RoutineExercise exercise = mapRoutineExerciseEntityToRoutineExercise(routineExerciseEntity);
-                exercises.add(exercise);
-            }
-
             routine.setName(routineEntity.getName());
-            routine.setExercises(exercises);
+            routine.setId(routineEntity.getId());
             routines.add(routine);
         }
 
@@ -135,6 +160,7 @@ public class HomeService {
     private Exercise mapExerciseEntityToExercise(ExerciseEntity exerciseEntity) {
 
         Exercise exercise = new Exercise();
+        exercise.setId(exerciseEntity.getId());
         exercise.setDifficulty(exerciseEntity.getDifficulty());
         exercise.setEquipment(exerciseEntity.getEquipment());
         exercise.setName(exerciseEntity.getName());
@@ -148,6 +174,7 @@ public class HomeService {
     private RoutineExercise mapRoutineExerciseEntityToRoutineExercise(RoutineExercisesEntity routineExerciseEntity) {
         Exercise exercise = mapExerciseEntityToExercise(routineExerciseEntity.getExerciseEntity());
         RoutineExercise routineExercise = new RoutineExercise();
+        routineExercise.setId(routineExerciseEntity.getId());
         routineExercise.setExercise(exercise);
         routineExercise.setQuantity(routineExerciseEntity.getQuantity());
         routineExercise.setWeight(routineExerciseEntity.getWeight());

@@ -1,9 +1,6 @@
 package com.IronTrack.IronTrackBE.Controllers;
 
-import com.IronTrack.IronTrackBE.Models.CreateRoutineRequest;
-import com.IronTrack.IronTrackBE.Models.CreateRoutineResponse;
-import com.IronTrack.IronTrackBE.Models.GetRoutinesResponse;
-import com.IronTrack.IronTrackBE.Models.Routine;
+import com.IronTrack.IronTrackBE.Models.*;
 import com.IronTrack.IronTrackBE.Services.HomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/routines")
 @RequiredArgsConstructor
 public class HomeController {
 
@@ -24,6 +21,31 @@ public class HomeController {
         List<Routine> routines = service.getRoutines();
         GetRoutinesResponse response = new GetRoutinesResponse(routines);
         return ResponseEntity.status(HttpStatus.OK.value()).body(response);
+    }
+
+    @GetMapping("/{routineId}")
+    public ResponseEntity<?> getRoutine(@PathVariable Long routineId) {
+        try {
+            Routine routine = service.getRoutine(routineId);
+            GetRoutineResponse response = new GetRoutineResponse();
+            response.setRoutine(routine);
+
+            return ResponseEntity.ok(response);
+
+        } catch (NullPointerException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage("Routine with ID: " + routineId + " was not found");
+
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+
+        } catch (SecurityException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            response.setMessage("Routine with ID: " + routineId + " not accessible");
+
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        }
     }
 
     @PostMapping("/createRoutine")

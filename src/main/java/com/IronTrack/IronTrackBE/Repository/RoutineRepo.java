@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface RoutineRepo extends JpaRepository<RoutineEntity, Integer> {
     Optional<List<RoutineEntity>> findAllByUserEntity(UserEntity userEntity);
     RoutineEntity findById(Long routineId);
-
 }
