@@ -32,6 +32,12 @@ public class RoutineService {
         return mapRoutineExercisesEntityToRoutineExercise(routineExercises);
     }
 
+    public void deleteRoutineExercise(Long routineId, Long routineExerciseId) throws NullPointerException, SecurityException {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        RoutineExercisesEntity routineExercises = getRoutineExercisesEntity(routine, routineExerciseId);
+        routineExercisesRepo.delete(routineExercises);
+    }
+
     private UserEntity getUserEntity() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
