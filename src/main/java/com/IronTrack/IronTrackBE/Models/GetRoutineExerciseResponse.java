@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetRoutineExerciseResponse {
 
-    private RoutineExercise routineExericse;
+    private RoutineExercise routineExercise;
 }

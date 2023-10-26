@@ -28,7 +28,7 @@ public class RoutineController {
         try {
             GetRoutineExerciseResponse response = new GetRoutineExerciseResponse();
             RoutineExercise routineExercise = service.getRoutineExercise(routineId, routineExerciseId);
-            response.setRoutineExericse(routineExercise);
+            response.setRoutineExercise(routineExercise);
             return ResponseEntity.ok(response);
         } catch (NoSuchElementException e) {
             errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
