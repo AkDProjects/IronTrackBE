@@ -35,6 +35,20 @@ public class RoutineService {
         return mapRoutineExercisesEntityToRoutineExercise(routineExercises);
     }
 
+    public void addRoutineExercise(Long routineId, RoutineExercise routineExercise) throws NullPointerException, SecurityException {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        ExerciseEntity exercise = getExerciseEntity(routineExercise);
+
+        RoutineExercisesEntity routineExercisesEntity = new RoutineExercisesEntity();
+        routineExercisesEntity.setRoutineEntity(routine);
+        routineExercisesEntity.setExerciseEntity(exercise);
+        routineExercisesEntity.setSets(routineExercise.getSets());
+        routineExercisesEntity.setQuantity(routineExercise.getQuantity());
+        routineExercisesEntity.setWeight(routineExercise.getWeight());
+        routineExercisesEntity.setQuantityUnit(routineExercise.getQuantityUnit());
+        routineExercisesRepo.save(routineExercisesEntity);
+    }
+
     public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
         RoutineEntity routine = getRoutineEntity(routineId);
         RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
