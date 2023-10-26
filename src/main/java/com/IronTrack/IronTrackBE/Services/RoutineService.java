@@ -6,6 +6,7 @@ import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
 import com.IronTrack.IronTrackBE.Repository.Entities.RoutineEntity;
 import com.IronTrack.IronTrackBE.Repository.Entities.RoutineExercisesEntity;
 import com.IronTrack.IronTrackBE.Repository.Entities.UserEntity;
+import com.IronTrack.IronTrackBE.Repository.ExerciseRepo;
 import com.IronTrack.IronTrackBE.Repository.RoutineExercisesRepo;
 import com.IronTrack.IronTrackBE.Repository.RoutineRepo;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +26,29 @@ public class RoutineService {
     private final UserRepo userRepo;
     private final RoutineRepo routineRepo;
     private final RoutineExercisesRepo routineExercisesRepo;
+    private final ExerciseRepo exerciseRepo;
 
     public RoutineExercise getRoutineExercise(Long routineId, Long routineExerciseId) throws NullPointerException, SecurityException {
         RoutineEntity routine = getRoutineEntity(routineId);
         RoutineExercisesEntity routineExercises = getRoutineExercisesEntity(routine, routineExerciseId);
 
         return mapRoutineExercisesEntityToRoutineExercise(routineExercises);
+    }
+
+    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
+        ExerciseEntity exerciseEntity = getExerciseEntity(routineExercise);
+        try {
+            newRoutineExercise.setExerciseEntity(exerciseEntity);
+            newRoutineExercise.setQuantityUnit(routineExercise.getQuantityUnit());
+            newRoutineExercise.setQuantity(routineExercise.getQuantity());
+            newRoutineExercise.setSets(routineExercise.getSets());
+            newRoutineExercise.setWeight(routineExercise.getWeight());
+            routineExercisesRepo.save(newRoutineExercise);
+        } catch (Exception ex) {
+            throw new Exception("There was a problem updating the routine exercise");
+        }
     }
 
     private UserEntity getUserEntity() {
@@ -41,6 +60,25 @@ public class RoutineService {
         }
 
         throw new SecurityException("User is not authenticated");
+    }
+
+    private ExerciseEntity getExerciseEntity(RoutineExercise routineExercise) {
+        Exercise exercise = routineExercise.getExercise();
+        Optional<ExerciseEntity> exerciseEntity = exerciseRepo.findByName(exercise.getName());
+
+        if (exerciseEntity.isPresent()) {
+            return exerciseEntity.get();
+        } else {
+            ExerciseEntity newExerciseEntity = new ExerciseEntity();
+            newExerciseEntity.setMuscle(exercise.getMuscle());
+            newExerciseEntity.setName(exercise.getName());
+            newExerciseEntity.setType(exercise.getType());
+            newExerciseEntity.setEquipment(exercise.getEquipment());
+            newExerciseEntity.setDifficulty(exercise.getDifficulty());
+            newExerciseEntity.setInstructions(exercise.getInstructions());
+            return exerciseRepo.save(newExerciseEntity);
+        }
+
     }
 
     private RoutineEntity getRoutineEntity(Long routineId) throws NoSuchElementException, SecurityException {
