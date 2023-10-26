@@ -49,6 +49,22 @@ public class RoutineService {
         routineExercisesRepo.save(routineExercisesEntity);
     }
 
+    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
+        ExerciseEntity exerciseEntity = getExerciseEntity(routineExercise);
+        try {
+            newRoutineExercise.setExerciseEntity(exerciseEntity);
+            newRoutineExercise.setQuantityUnit(routineExercise.getQuantityUnit());
+            newRoutineExercise.setQuantity(routineExercise.getQuantity());
+            newRoutineExercise.setSets(routineExercise.getSets());
+            newRoutineExercise.setWeight(routineExercise.getWeight());
+            routineExercisesRepo.save(newRoutineExercise);
+        } catch (Exception ex) {
+            throw new Exception("There was a problem updating the routine exercise");
+        }
+    }
+
     private UserEntity getUserEntity() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated()) {
