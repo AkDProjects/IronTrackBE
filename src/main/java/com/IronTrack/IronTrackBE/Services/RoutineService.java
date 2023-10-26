@@ -35,6 +35,12 @@ public class RoutineService {
         return mapRoutineExercisesEntityToRoutineExercise(routineExercises);
     }
 
+    public void deleteRoutineExercise(Long routineId, Long routineExerciseId) throws NullPointerException, SecurityException {
+        RoutineEntity routine = getRoutineEntity(routineId);
+        RoutineExercisesEntity routineExercises = getRoutineExercisesEntity(routine, routineExerciseId);
+        routineExercisesRepo.delete(routineExercises);
+    }
+
     public void addRoutineExercise(Long routineId, RoutineExercise routineExercise) throws NullPointerException, SecurityException {
         RoutineEntity routine = getRoutineEntity(routineId);
         ExerciseEntity exercise = getExerciseEntity(routineExercise);

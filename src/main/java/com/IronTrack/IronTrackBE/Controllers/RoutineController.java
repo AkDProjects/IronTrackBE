@@ -100,4 +100,28 @@ public class RoutineController {
 
 
     }
+
+    @DeleteMapping("/{routine_exercise_id}")
+    public ResponseEntity<?> deleteRoutineExercise(
+            @PathVariable("routine_id") Long routineId,
+            @PathVariable("routine_exercise_id") Long routineExerciseId
+    ) {
+        ErrorResponse errorResponse= new ErrorResponse();
+
+        try {
+            service.deleteRoutineExercise(routineId, routineExerciseId);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            errorResponse.setStatusCode(HttpStatus.NOT_FOUND.value());
+            errorResponse.setMessage(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            errorResponse.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            errorResponse.setMessage(e.getMessage());
+        } catch (SecurityException e) {
+            errorResponse.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            errorResponse.setMessage(e.getMessage());
+        }
+
+        return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
+    }
 }
