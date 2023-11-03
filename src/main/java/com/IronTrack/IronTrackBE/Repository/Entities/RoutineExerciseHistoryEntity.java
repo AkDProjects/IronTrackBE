@@ -13,8 +13,7 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "routine_exercises")
-
+@Table(name = "routine_exercise_history")
 @AllArgsConstructor
 public class RoutineExerciseHistoryEntity {
     @Id

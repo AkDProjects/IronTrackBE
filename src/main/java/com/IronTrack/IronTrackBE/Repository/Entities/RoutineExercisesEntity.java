@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -35,8 +36,8 @@ public class RoutineExercisesEntity {
     private String quantityUnit;
     @Column
     private Integer iterations;
-    @OneToMany(mappedBy = "routineExerciseHistoryEntity", cascade = CascadeType.ALL)
-    private RoutineExerciseHistoryEntity routineExerciseHistoryEntity;
+    @OneToMany(mappedBy = "routineExerciseEntity", cascade = CascadeType.REMOVE)
+    private List<RoutineExerciseHistoryEntity> routineExerciseHistoryEntity;
 
 
     @Override
