@@ -3,7 +3,6 @@ package com.IronTrack.IronTrackBE.Repository.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import java.util.Objects;

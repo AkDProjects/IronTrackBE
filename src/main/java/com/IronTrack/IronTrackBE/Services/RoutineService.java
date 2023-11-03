@@ -68,7 +68,7 @@ public class RoutineService {
         routineExerciseHistoryRepo.save(routineExerciseHistoryEntity);
     }
 
-    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
+    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws Exception {
         RoutineEntity routine = getRoutineEntity(routineId);
         RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
         ExerciseEntity exerciseEntity = getExerciseEntity(routineExercise);

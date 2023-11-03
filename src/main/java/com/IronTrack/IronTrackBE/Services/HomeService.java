@@ -136,7 +136,7 @@ public class HomeService {
             routineExercisesEntity.setQuantityUnit(routineExercise.getQuantityUnit());
             routineExercisesEntity.setIterations(0);
 
-            savedRoutineExercises.add(routineExercisesRepo.save(routineExercisesEntity));;
+            savedRoutineExercises.add(routineExercisesRepo.save(routineExercisesEntity));
         }
 
         return savedRoutineExercises;
