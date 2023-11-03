@@ -82,6 +82,7 @@ public class HomeService {
             RoutineExercise routineExercise = mapRoutineExerciseEntityToRoutineExercise(routineExercisesEntity);
             routineExercises.add(routineExercise);
         }
+
         return routineExercises;
     }
 
