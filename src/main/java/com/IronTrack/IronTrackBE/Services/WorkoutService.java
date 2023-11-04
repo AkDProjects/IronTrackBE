@@ -42,7 +42,7 @@ public class WorkoutService {
         WorkoutEntity savedWorkoutEntity = workoutRepo.save(workoutEntity);
 
         return mapWorkoutEntityToWorkout(savedWorkoutEntity);
-    };
+    }
 
     public void updateWorkoutSession(Workout workout) throws NullPointerException, SecurityException, ExceptionInInitializerError {
         if (workout.getId() == null || workout.getSessionEnd() == null) {
