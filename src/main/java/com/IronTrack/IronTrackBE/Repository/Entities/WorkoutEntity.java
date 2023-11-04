@@ -3,9 +3,7 @@ package com.IronTrack.IronTrackBE.Repository.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
