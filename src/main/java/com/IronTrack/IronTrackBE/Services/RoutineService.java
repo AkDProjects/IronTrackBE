@@ -2,20 +2,15 @@ package com.IronTrack.IronTrackBE.Services;
 
 import com.IronTrack.IronTrackBE.Models.Exercise;
 import com.IronTrack.IronTrackBE.Models.RoutineExercise;
-import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.RoutineEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.RoutineExercisesEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.UserEntity;
-import com.IronTrack.IronTrackBE.Repository.ExerciseRepo;
-import com.IronTrack.IronTrackBE.Repository.RoutineExercisesRepo;
-import com.IronTrack.IronTrackBE.Repository.RoutineRepo;
-import com.IronTrack.IronTrackBE.Repository.UserRepo;
+import com.IronTrack.IronTrackBE.Repository.*;
+import com.IronTrack.IronTrackBE.Repository.Entities.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -27,6 +22,7 @@ public class RoutineService {
     private final RoutineRepo routineRepo;
     private final RoutineExercisesRepo routineExercisesRepo;
     private final ExerciseRepo exerciseRepo;
+    private final RoutineExerciseHistoryRepo routineExerciseHistoryRepo;
 
     public RoutineExercise getRoutineExercise(Long routineId, Long routineExerciseId) throws NullPointerException, SecurityException {
         RoutineEntity routine = getRoutineEntity(routineId);
@@ -52,10 +48,27 @@ public class RoutineService {
         routineExercisesEntity.setQuantity(routineExercise.getQuantity());
         routineExercisesEntity.setWeight(routineExercise.getWeight());
         routineExercisesEntity.setQuantityUnit(routineExercise.getQuantityUnit());
-        routineExercisesRepo.save(routineExercisesEntity);
+        routineExercisesEntity.setIterations(0);
+        RoutineExercisesEntity result = routineExercisesRepo.save(routineExercisesEntity);
+
+        addRoutineExerciseHistory(result);
     }
 
-    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws NullPointerException, SecurityException, Exception {
+    public void addRoutineExerciseHistory(RoutineExercisesEntity routineExerciseEntity) {
+        RoutineExerciseHistoryEntity routineExerciseHistoryEntity = new RoutineExerciseHistoryEntity();
+        routineExerciseHistoryEntity.setExerciseEntity(routineExerciseEntity.getExerciseEntity());
+        routineExerciseHistoryEntity.setRoutineExerciseEntity(routineExerciseEntity);
+        routineExerciseHistoryEntity.setWeight(routineExerciseEntity.getWeight());
+        routineExerciseHistoryEntity.setSets(routineExerciseEntity.getSets());
+        routineExerciseHistoryEntity.setQuantity(routineExerciseEntity.getQuantity());
+        routineExerciseHistoryEntity.setQuantityUnit(routineExerciseEntity.getQuantityUnit());
+        routineExerciseHistoryEntity.setIteration(routineExerciseEntity.getIterations());
+        routineExerciseHistoryEntity.setUpdatedAt(LocalDateTime.now());
+
+        routineExerciseHistoryRepo.save(routineExerciseHistoryEntity);
+    }
+
+    public void updateRoutineExercise(Long routineId, Long routineExerciseId, RoutineExercise routineExercise) throws Exception {
         RoutineEntity routine = getRoutineEntity(routineId);
         RoutineExercisesEntity newRoutineExercise = getRoutineExercisesEntity(routine, routineExerciseId);
         ExerciseEntity exerciseEntity = getExerciseEntity(routineExercise);
@@ -65,7 +78,10 @@ public class RoutineService {
             newRoutineExercise.setQuantity(routineExercise.getQuantity());
             newRoutineExercise.setSets(routineExercise.getSets());
             newRoutineExercise.setWeight(routineExercise.getWeight());
-            routineExercisesRepo.save(newRoutineExercise);
+            newRoutineExercise.setIterations(newRoutineExercise.getIterations() + 1);
+            RoutineExercisesEntity result = routineExercisesRepo.save(newRoutineExercise);
+            addRoutineExerciseHistory(result);
+
         } catch (Exception ex) {
             throw new Exception("There was a problem updating the routine exercise");
         }
