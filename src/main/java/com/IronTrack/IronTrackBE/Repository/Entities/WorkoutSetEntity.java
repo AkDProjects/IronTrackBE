@@ -24,9 +24,9 @@ public class WorkoutSetEntity {
     @JoinColumn(name = "routine_exercise_history_id")
     private RoutineExerciseHistoryEntity routineExerciseHistoryEntity;
     @Column
-    private Long setStart;
+    private Long sessionStart;
     @Column
-    private Long setEnd;
+    private Long sessionEnd;
 
 
     @Override

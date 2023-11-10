@@ -19,9 +19,8 @@ public class RoutineExerciseHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "routine_exercise_id")
-    private RoutineExercisesEntity routineExerciseEntity;
+    @Column
+    private Long routineExerciseId;
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     private ExerciseEntity exerciseEntity;

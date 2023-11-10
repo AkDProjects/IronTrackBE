@@ -35,8 +35,6 @@ public class RoutineExercisesEntity {
     private String quantityUnit;
     @Column
     private Integer iterations;
-    @OneToMany(mappedBy = "routineExerciseEntity", cascade = CascadeType.REMOVE)
-    private List<RoutineExerciseHistoryEntity> routineExerciseHistoryEntity;
 
 
     @Override
