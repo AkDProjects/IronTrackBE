@@ -14,11 +14,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WorkoutSetService {
     private final UserRepo userRepo;
-    private final RoutineRepo routineRepo;
     private final RoutineExercisesRepo routineExerciseRepo;
     private final RoutineExerciseHistoryRepo routineExerciseHistoryEntity;
-    private final WorkoutRepo workoutRepo;
     private final WorkoutSetRepo workoutSetRepo;
+
     public WorkoutSet createWorkoutSetSession(WorkoutSet workoutSet) throws NullPointerException, SecurityException, ExceptionInInitializerError {
         if (workoutSet.getRoutineExercise()== null || workoutSet.getSessionStart() == null) {
             throw new ExceptionInInitializerError("Either exercise or session start are not defined");
