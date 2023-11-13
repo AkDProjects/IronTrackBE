@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +19,23 @@ public class WorkoutSetService {
     private final RoutineExercisesRepo routineExerciseRepo;
     private final RoutineExerciseHistoryRepo routineExerciseHistoryEntity;
     private final WorkoutSetRepo workoutSetRepo;
+    private final WorkoutRepo workoutRepo;
 
-    public WorkoutSet createWorkoutSetSession(WorkoutSet workoutSet) throws NullPointerException, SecurityException, ExceptionInInitializerError {
+    public void endWorkoutSetSession(WorkoutSet workoutSet) {
+        if (workoutSet.getId()== null || workoutSet.getSessionEnd() == null) {
+            throw new ExceptionInInitializerError("Either exercise or session start are not defined");
+        }
+
+        Optional<WorkoutSetEntity> workoutSetEntity = workoutSetRepo.findById(workoutSet.getId());
+        if (workoutSetEntity.isPresent()) {
+            workoutSetEntity.get().setSessionEnd(workoutSet.getSessionEnd());
+            workoutSetRepo.save(workoutSetEntity.get());
+        } else {
+            throw new NullPointerException("Routine Exercise with ID " + workoutSet.getRoutineExercise().getId() + " does not exist");
+        }
+    }
+
+    public WorkoutSet createWorkoutSetSession(Long workoutId, WorkoutSet workoutSet) throws NullPointerException, SecurityException, ExceptionInInitializerError {
         if (workoutSet.getRoutineExercise()== null || workoutSet.getSessionStart() == null) {
             throw new ExceptionInInitializerError("Either exercise or session start are not defined");
         }
@@ -35,6 +52,14 @@ public class WorkoutSetService {
 
         workoutSetEntity.setRoutineExerciseHistoryEntity(routineExerciseHistoryEntity);
         workoutSetEntity.setSessionStart(workoutSet.getSessionStart());
+        Optional<WorkoutEntity> workoutEntity = workoutRepo.findById(workoutId);
+
+        if (workoutEntity.isPresent()) {
+            workoutSetEntity.setWorkoutEntity(workoutEntity.get());
+        } else {
+            throw new NullPointerException("Workout with ID " + workoutId + " does not exist");
+        }
+
 
         WorkoutSetEntity savedWorkoutSetEntity = workoutSetRepo.save(workoutSetEntity);
 

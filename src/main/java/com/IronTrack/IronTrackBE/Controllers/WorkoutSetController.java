@@ -15,10 +15,33 @@ public class WorkoutSetController {
 
     private final WorkoutSetService service;
 
-    @PostMapping
-    public ResponseEntity<?> createWorkoutSetSession(@RequestBody WorkoutSet workoutSet) {
+    @PutMapping
+    public ResponseEntity<?> endWorkoutSetSession(@RequestBody WorkoutSet workoutSet) {
         try {
-            WorkoutSet response = service.createWorkoutSetSession(workoutSet);
+            service.endWorkoutSetSession(workoutSet);
+            return ResponseEntity.noContent().build();
+        } catch (NullPointerException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setMessage(e.getMessage());
+            response.setStatusCode(HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        } catch (SecurityException e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setMessage(e.getMessage());
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        } catch (ExceptionInInitializerError e) {
+            ErrorResponse response = new ErrorResponse();
+            response.setMessage(e.getMessage());
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(response.getStatusCode()).body(response);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createWorkoutSetSession(@PathVariable Long workout_id, @RequestBody WorkoutSet workoutSet) {
+        try {
+            WorkoutSet response = service.createWorkoutSetSession(workout_id, workoutSet);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (NullPointerException e) {
             ErrorResponse response = new ErrorResponse();
