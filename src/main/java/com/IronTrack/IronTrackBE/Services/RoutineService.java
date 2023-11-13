@@ -57,7 +57,7 @@ public class RoutineService {
     public void addRoutineExerciseHistory(RoutineExercisesEntity routineExerciseEntity) {
         RoutineExerciseHistoryEntity routineExerciseHistoryEntity = new RoutineExerciseHistoryEntity();
         routineExerciseHistoryEntity.setExerciseEntity(routineExerciseEntity.getExerciseEntity());
-        routineExerciseHistoryEntity.setRoutineExerciseEntity(routineExerciseEntity);
+        routineExerciseHistoryEntity.setRoutineExerciseId(routineExerciseEntity.getId());
         routineExerciseHistoryEntity.setWeight(routineExerciseEntity.getWeight());
         routineExerciseHistoryEntity.setSets(routineExerciseEntity.getSets());
         routineExerciseHistoryEntity.setQuantity(routineExerciseEntity.getQuantity());

@@ -31,7 +31,7 @@ public class WorkoutSetService {
         }
 
         RoutineExerciseHistoryEntity routineExerciseHistoryEntity = this.routineExerciseHistoryEntity
-            .findByRoutineExerciseAndIteration(routineExerciseEntity.getId(), routineExerciseEntity.getIterations());
+            .findByRoutineExerciseIdAndIteration(routineExerciseEntity.getId(), routineExerciseEntity.getIterations());
 
         workoutSetEntity.setRoutineExerciseHistoryEntity(routineExerciseHistoryEntity);
         workoutSetEntity.setSessionStart(workoutSet.getSessionStart());

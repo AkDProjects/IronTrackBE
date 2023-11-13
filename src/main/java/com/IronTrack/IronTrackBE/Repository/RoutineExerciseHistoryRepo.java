@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoutineExerciseHistoryRepo extends JpaRepository<RoutineExerciseHistoryEntity, Long> {
 
-    RoutineExerciseHistoryEntity findByRoutineExerciseAndIteration(Long routineExerciseId, Integer iteration);
+    RoutineExerciseHistoryEntity findByRoutineExerciseIdAndIteration(Long routineExerciseId, Integer iteration);
 }
