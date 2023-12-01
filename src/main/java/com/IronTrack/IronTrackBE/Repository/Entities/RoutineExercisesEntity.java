@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -35,8 +34,6 @@ public class RoutineExercisesEntity {
     private String quantityUnit;
     @Column
     private Integer iterations;
-    @OneToMany(mappedBy = "routineExerciseEntity", cascade = CascadeType.REMOVE)
-    private List<RoutineExerciseHistoryEntity> routineExerciseHistoryEntity;
 
 
     @Override
