@@ -1,19 +1,9 @@
 package com.IronTrack.IronTrackBE.Services;
 
 import com.IronTrack.IronTrackBE.Models.*;
-import com.IronTrack.IronTrackBE.Repository.Entities.ExerciseEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.RoutineEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.RoutineExercisesEntity;
-import com.IronTrack.IronTrackBE.Repository.Entities.UserEntity;
-import com.IronTrack.IronTrackBE.Repository.ExerciseRepo;
-import com.IronTrack.IronTrackBE.Repository.RoutineExercisesRepo;
-import com.IronTrack.IronTrackBE.Repository.RoutineRepo;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.IronTrack.IronTrackBE.Repository.Entities.*;
+import com.IronTrack.IronTrackBE.Repository.*;
 
-import java.net.http.HttpResponse;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +24,7 @@ public class HomeService {
     private final RoutineRepo routineRepo;
     private final ExerciseRepo exerciseRepo;
     private final RoutineExercisesRepo routineExercisesRepo;
-    private final ApiNinjasService apiNinjas;
+    private final RoutineExerciseHistoryRepo routineExerciseHistoryRepo;
 
     public List<Routine> getRoutines() {
         UserEntity user = getUserEntity();
@@ -67,7 +58,8 @@ public class HomeService {
         UserEntity user = getUserEntity();
         List<ExerciseEntity> exercises = getExerciseEntities(request.getExercises());
         RoutineEntity routine = saveRoutine(request.getName(), user);
-        saveRoutineExerciseEntities(request.getExercises(), routine, exercises);
+        List<RoutineExercisesEntity> routineExercises = saveRoutineExerciseEntities(request.getExercises(), routine, exercises);
+        saveRoutineExerciseHistoryEntities(routineExercises);
 
         return "Successfully created new routine";
     }
@@ -90,6 +82,7 @@ public class HomeService {
             RoutineExercise routineExercise = mapRoutineExerciseEntityToRoutineExercise(routineExercisesEntity);
             routineExercises.add(routineExercise);
         }
+
         return routineExercises;
     }
 
@@ -127,7 +120,9 @@ public class HomeService {
         return routineRepo.save(routineEntity);
     }
 
-    private void saveRoutineExerciseEntities(List<RoutineExercise> routineExercises, RoutineEntity routine, List<ExerciseEntity> exercises) {
+    private List<RoutineExercisesEntity> saveRoutineExerciseEntities(List<RoutineExercise> routineExercises, RoutineEntity routine, List<ExerciseEntity> exercises) {
+        List<RoutineExercisesEntity> savedRoutineExercises = new ArrayList<>();
+
         for (int i = 0; i < routineExercises.size(); i++) {
             RoutineExercise routineExercise = routineExercises.get(i);
             ExerciseEntity exercise = exercises.get(i);
@@ -139,8 +134,28 @@ public class HomeService {
             routineExercisesEntity.setSets(routineExercise.getSets());
             routineExercisesEntity.setQuantity(routineExercise.getQuantity());
             routineExercisesEntity.setQuantityUnit(routineExercise.getQuantityUnit());
+            routineExercisesEntity.setIterations(0);
 
-            routineExercisesRepo.save(routineExercisesEntity);
+            savedRoutineExercises.add(routineExercisesRepo.save(routineExercisesEntity));
+        }
+
+        return savedRoutineExercises;
+    }
+
+    private void saveRoutineExerciseHistoryEntities(List<RoutineExercisesEntity> routineExerciseEntities) {
+        for (RoutineExercisesEntity routineExerciseEntity : routineExerciseEntities) {
+
+            RoutineExerciseHistoryEntity routineExerciseHistoryEntity = new RoutineExerciseHistoryEntity();
+            routineExerciseHistoryEntity.setExerciseEntity(routineExerciseEntity.getExerciseEntity());
+            routineExerciseHistoryEntity.setRoutineExerciseId(routineExerciseEntity.getId());
+            routineExerciseHistoryEntity.setWeight(routineExerciseEntity.getWeight());
+            routineExerciseHistoryEntity.setSets(routineExerciseEntity.getSets());
+            routineExerciseHistoryEntity.setQuantity(routineExerciseEntity.getQuantity());
+            routineExerciseHistoryEntity.setQuantityUnit(routineExerciseEntity.getQuantityUnit());
+            routineExerciseHistoryEntity.setIteration(routineExerciseEntity.getIterations());
+            routineExerciseHistoryEntity.setUpdatedAt(LocalDateTime.now());
+
+            routineExerciseHistoryRepo.save(routineExerciseHistoryEntity);
         }
     }
 

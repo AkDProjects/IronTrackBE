@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -12,29 +11,26 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "routines")
-public class RoutineEntity {
+@Table(name = "workout")
+@AllArgsConstructor
+public class WorkoutEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
-    @OneToMany(mappedBy = "routineEntity", cascade = CascadeType.ALL)
-    private List<RoutineExercisesEntity> routineExercisesEntities;
-    @OneToMany(mappedBy = "routineEntity", cascade = CascadeType.ALL)
-    private List<WorkoutEntity> workoutEntities;
-
+    @JoinColumn(name = "routine_id")
+    private RoutineEntity routineEntity;
     @Column
-    private String name;
+    private Long sessionStart;
+    @Column
+    private Long sessionEnd;
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        RoutineEntity that = (RoutineEntity) o;
+        WorkoutEntity that = (WorkoutEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 

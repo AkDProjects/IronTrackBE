@@ -3,7 +3,9 @@ package com.IronTrack.IronTrackBE.Repository.Entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -11,16 +13,14 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "routine_exercises")
-
+@Table(name = "routine_exercise_history")
 @AllArgsConstructor
-public class RoutineExercisesEntity {
+public class RoutineExerciseHistoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "routine_id")
-    private RoutineEntity routineEntity;
+    @Column
+    private Long routineExerciseId;
     @ManyToOne
     @JoinColumn(name = "exercise_id")
     private ExerciseEntity exerciseEntity;
@@ -33,14 +33,17 @@ public class RoutineExercisesEntity {
     @Column
     private String quantityUnit;
     @Column
-    private Integer iterations;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime UpdatedAt;
+    @Column
+    private Integer iteration;
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        RoutineExercisesEntity that = (RoutineExercisesEntity) o;
+        RoutineExerciseHistoryEntity that = (RoutineExerciseHistoryEntity) o;
         return id != null && Objects.equals(id, that.id);
     }
 
@@ -49,3 +52,4 @@ public class RoutineExercisesEntity {
         return getClass().hashCode();
     }
 }
+
