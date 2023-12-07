@@ -1,5 +1,6 @@
 package com.IronTrack.IronTrackBE.Repository.Entities;
 
+import com.IronTrack.IronTrackBE.Models.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,6 +30,14 @@ public class UserEntity implements UserDetails {
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private List<RoutineEntity> routineEntities;
+
+    public UserEntity(User thisUser) {
+        this.name = thisUser.getName();
+        this.email = thisUser.getEmail();
+        this.password = thisUser.getPassword();
+        this.id = thisUser.getId();
+        this.role = Role.USER;
+    }
 
 
     @Override

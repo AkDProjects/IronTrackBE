@@ -95,7 +95,7 @@ public class HomeService {
                 .findByName(exercise.getName());
 
             if (exerciseEntity.isPresent()) {
-                exercises.add(exerciseEntity.orElse(null));
+                exercises.add(exerciseEntity.get());
             } else {
                 ExerciseEntity newExercise = new ExerciseEntity();
                 newExercise.setName(exercise.name);
