@@ -2,8 +2,10 @@ package com.IronTrack.IronTrackBE.Models;
 
 import com.IronTrack.IronTrackBE.Repository.Entities.UserEntity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class User {
     private String name;
     private String email;
