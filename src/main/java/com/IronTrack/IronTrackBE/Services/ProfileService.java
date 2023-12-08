@@ -4,6 +4,7 @@ import com.IronTrack.IronTrackBE.Models.AuthenticationResponse;
 import com.IronTrack.IronTrackBE.Models.User;
 import com.IronTrack.IronTrackBE.Repository.Entities.UserEntity;
 import com.IronTrack.IronTrackBE.Repository.UserRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class ProfileService {
 
 
     //Does this has cascading effects
+    @Transactional
     public void deleteByEmail(String email) {
         userRepo.deleteByEmail(email);
     }
@@ -35,10 +37,10 @@ public class ProfileService {
     }
 
 
-    public User editUserName(String email, String newName) {
+    public User editName(String email, String newName) {
         Optional<UserEntity> userEntity = userRepo.findByEmail(email);
         User thisUser = new User(userEntity.get());
-        thisUser.setEmail(newName);
+        thisUser.setName(newName);
         userRepo.save(new UserEntity(thisUser));
         return thisUser;
     }
@@ -47,6 +49,7 @@ public class ProfileService {
         Optional<UserEntity> userEntity = userRepo.findByEmail(email);
         User thisUser = new User(userEntity.get());
         thisUser.setEmail(newEmail);
+        userRepo.save(new UserEntity(thisUser));
         return null;
 
     }
@@ -57,7 +60,8 @@ public class ProfileService {
         User thisUser = new User(userEntity.get());
         String storedPassword = thisUser.getPassword();
         if(passwordEncoder.matches(oldPassword,storedPassword)){
-            thisUser.setPassword(newPassword);
+            thisUser.setPassword(passwordEncoder.encode(newPassword));
+            userRepo.save(new UserEntity(thisUser));
         }
 
 

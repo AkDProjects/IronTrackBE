@@ -27,10 +27,10 @@ ProfileService profileService;
     }
 
     @PutMapping("/profile/editname")
-    public void editName(@RequestHeader("Authorization") String authorizationHeader, @RequestBody User newUserName) {
+    public void editName(@RequestHeader("Authorization") String authorizationHeader, @RequestBody User newName) {
         getUsernameFromToken(authorizationHeader);
         String username = getUsernameFromToken(authorizationHeader);
-        profileService.editUserName(username, newUserName.getName());
+        profileService.editName(username, newName.getName());
 
     }
 
@@ -44,10 +44,12 @@ ProfileService profileService;
     }
 
     @PutMapping("/profile/editpassword")
-    public void editPassword(@RequestHeader("Authorization") String authorizationHeader, @RequestBody User oldPassword, String newPassword) {
+    public void editPassword(@RequestHeader("Authorization") String authorizationHeader, @RequestBody Map<String,String> request) {
         getUsernameFromToken(authorizationHeader);
         String username = getUsernameFromToken(authorizationHeader);
-        profileService.editPassword(username, oldPassword.getPassword(), newPassword);
+        String oldPassword = request.get("password");
+        String newPassword = request.get("newPassword");
+        profileService.editPassword(username, oldPassword, newPassword);
 
     }
 
